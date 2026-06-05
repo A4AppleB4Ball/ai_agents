@@ -1,0 +1,65 @@
+[
+  {
+    "agent_id": "UI-Agent",
+    "name": "UI Testing Agent",
+    "workspace_path": "UI_Testing_Agent",
+    "description": "Automated UI testing with live browser visualization. Uses MCP browser tools for structured browser interactions, streams live browser activity, and generates detailed reports with screenshot evidence.",
+    "options": {
+      "model": "us.anthropic.claude-sonnet-4-6",
+      "max_turns": 50,
+      "permission_mode": "auto",
+      "allowed_tools": [
+        "Skill",
+        "Read(*)",
+        "Write(*)",
+        "mcp__browser_tools__browser_open",
+        "mcp__browser_tools__browser_navigate",
+        "mcp__browser_tools__browser_snapshot",
+        "mcp__browser_tools__browser_click",
+        "mcp__browser_tools__browser_type",
+        "mcp__browser_tools__browser_press_key",
+        "mcp__browser_tools__browser_wait_for",
+        "mcp__browser_tools__browser_evaluate",
+        "mcp__browser_tools__browser_screenshot",
+        "mcp__browser_tools__browser_console_logs",
+        "mcp__browser_tools__browser_close",
+        "mcp__browser_tools__browser_list",
+        "mcp__browser_tools__record_test_step",
+        "mcp__browser_tools__finalize_run"
+      ],
+      "disallowed_tools": [],
+      "mcp_servers": {
+        "browser_tools": {
+          "type": "stdio",
+          "command": "python",
+          "args": ["-m", "agent.service.browser.mcp_server"],
+          "env": {
+            "PYTHONPATH": "."
+          }
+        }
+      },
+      "include_partial_messages": true,
+      "skills_enabled": true,
+      "setting_sources": ["user", "project"]
+    },
+    "created_at": "2026-05-27T22:00:00.000000",
+    "status": "active"
+  },
+  {
+    "agent_id": "digital_kb",
+    "name": "digital_kb",
+    "workspace_path": "digital_kb",
+    "global": true,
+    "options": {
+      "model": "us.anthropic.claude-sonnet-4-6",
+      "permission_mode": "default",
+      "allowed_tools": ["Skill"],
+      "disallowed_tools": [],
+      "include_partial_messages": true,
+      "skills_enabled": true,
+      "setting_sources": ["user", "project"]
+    },
+    "created_at": "2026-06-02T10:00:00.000000",
+    "status": "active"
+  }
+]

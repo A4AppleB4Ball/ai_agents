@@ -1,0 +1,12 @@
+{
+  "skills": {
+    "digitalkb": {
+      "path": "skills/digitalkb",
+      "description": "Answer questions about project status across Digital verticals"
+    },
+    "ingestor": {
+      "path": "skills/ingestor",
+      "description": "Ingest extracted documents and produce structured knowledge files via PR"
+    }
+  }
+}

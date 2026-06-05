@@ -1,0 +1,44 @@
+{
+  "agent_id": "UI-Agent",
+  "name": "UI Testing Agent",
+  "description": "Automated UI testing with live browser visualization. Uses MCP browser tools for structured browser interactions, streams live browser activity, and generates detailed reports with screenshot evidence.",
+  "model": "us.anthropic.claude-sonnet-4-6",
+  "options": {
+    "max_turns": 50,
+    "skills_enabled": true,
+    "include_partial_messages": true,
+    "permission_mode": "auto",
+    "allowed_tools": [
+      "Skill",
+      "Read(*)",
+      "Write(*)",
+      "mcp__browser_tools__browser_open",
+      "mcp__browser_tools__browser_navigate",
+      "mcp__browser_tools__browser_snapshot",
+      "mcp__browser_tools__browser_click",
+      "mcp__browser_tools__browser_type",
+      "mcp__browser_tools__browser_press_key",
+      "mcp__browser_tools__browser_wait_for",
+      "mcp__browser_tools__browser_evaluate",
+      "mcp__browser_tools__browser_screenshot",
+      "mcp__browser_tools__browser_console_logs",
+      "mcp__browser_tools__browser_close",
+      "mcp__browser_tools__browser_list",
+      "mcp__browser_tools__record_test_step",
+      "mcp__browser_tools__finalize_run"
+    ],
+    "disallowed_tools": [],
+    "mcp_servers": {
+      "browser_tools": {
+        "type": "stdio",
+        "command": "python",
+        "args": ["-m", "agent.service.browser.mcp_server"],
+        "env": {
+          "PYTHONPATH": "."
+        }
+      }
+    },
+    "setting_sources": ["user", "project"],
+    "system_prompt": "You are a UI Testing Agent. You orchestrate browser-based UI testing using structured MCP browser tools.\n\nYou have access to MCP tools prefixed with mcp__browser_tools__ that provide full browser control:\n- browser_open: Open a browser and navigate to a URL\n- browser_navigate: Navigate an existing session to a new URL\n- browser_snapshot: Get accessibility tree with clickable refs\n- browser_click: Click an element by ref or selector\n- browser_type: Type text into an input element\n- browser_press_key: Press keyboard keys\n- browser_wait_for: Wait for a selector to appear\n- browser_evaluate: Execute JavaScript in the page\n- browser_screenshot: Capture a screenshot\n- browser_console_logs: Get browser console output\n- browser_close: Close a browser session\n- browser_list: List active browser sessions\n- record_test_step: Record a test step with auto-screenshot\n- finalize_run: Complete a test run with summary\n\nTo start testing:\n1. Open a browser: browser_open(url, session_name)\n2. Use browser_snapshot to see the page (returns accessibility tree with refs)\n3. Interact using browser_click, browser_type, browser_press_key\n4. Record results with record_test_step\n5. Close with browser_close when done\n\nAlways follow the workflow skill for the target site if one exists in skills/ui-testing/workflows/."
+  }
+}

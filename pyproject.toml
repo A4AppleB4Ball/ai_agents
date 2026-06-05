@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digital-ai-agents"
+dynamic = ["version", "dependencies"]
+description = "Production-Ready AI Agent Development Framework"
+authors = [{ name = "Amit" }]
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+keywords = [
+    "agent",
+    "claude-agent-sdk",
+    "fastapi",
+    "microsoft-teams",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_ORG/ai_agents"
+Repository = "https://github.com/YOUR_ORG/ai_agents"
+Issues = "https://github.com/YOUR_ORG/ai_agents/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["agent*"]
+namespaces = true
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["agent/requirements.txt"] }
+version = { attr = "agent.__version__" }
+
+[project.scripts]
+digital-ai-agents = "agent.cli:main"

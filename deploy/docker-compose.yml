@@ -1,0 +1,66 @@
+x-logging:
+  logging: &default-logging
+    driver: "local"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+
+services:
+  digital-ai-agents-app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: ${IMAGE:-digital-ai-agents}:app-${TAG:-latest}
+    restart: always
+    shm_size: '2gb'
+    environment:
+      - TZ=UTC
+      - SERVER_TYPE=gunicorn
+      - WORKSPACE_PATH=/home/agent/data/workspace
+      - AGENTS_DATA_PATH=/home/agent/data/agents
+      - CACHE_FILE_DIR=/home/agent/cache
+      - LOG_PATH=/home/agent/logs
+      - BROWSER_HEADLESS=true
+      - BROWSER_MAX_SESSIONS=5
+      - BROWSER_SCREENCAST_FPS=8
+      - BROWSER_SCREENCAST_QUALITY=60
+      - BROWSER_SESSION_TIMEOUT=600
+    networks:
+      - net
+    ports:
+      - "8010:8010"
+    volumes:
+      - agent-home:/home/agent
+    env_file:
+      - ../.env
+    logging: *default-logging
+
+  web:
+    build:
+      context: ../web
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_WS_URL:-ws://localhost:8010/agent/v1/chat/ws}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8010/agent/v1}
+        - NEXT_PUBLIC_DEFAULT_MODEL=${NEXT_PUBLIC_DEFAULT_MODEL:-claude-sonnet-4-6-20250514}
+    image: ${IMAGE:-digital-ai-agents}:web-${TAG:-latest}
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    networks:
+      - net
+    ports:
+      - "3000:3000"
+    logging: *default-logging
+    depends_on:
+      - digital-ai-agents-app
+
+networks:
+  net:
+    external: true
+
+volumes:
+  agent-home:
